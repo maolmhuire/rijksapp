@@ -1,2 +1,2 @@
 # rijksapp
-List and detail app of the Rijksmuseum Collection
+List and detail Android app of the Rijksmuseum Collection.
