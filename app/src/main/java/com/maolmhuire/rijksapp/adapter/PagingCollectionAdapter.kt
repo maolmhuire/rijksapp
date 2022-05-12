@@ -30,7 +30,7 @@ class PagingCollectionAdapter(private val listener: CollectionAdapterListener)
 ) {
 
     override fun onBindViewHolder(holder: CollectionItemViewHolder, position: Int) {
-        val item = checkNotNull(getItem(position))
+        val item = requireNotNull(getItem(position))
         if (item is ArtObjectUI) {
             with(holder as ArtObjectViewHolder) {
                 collectionView.setText(item.artObject.longTitle)

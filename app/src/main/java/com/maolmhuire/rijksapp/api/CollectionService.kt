@@ -14,5 +14,5 @@ interface CollectionService {
     ): Response<CollectionResponse>
 
     @GET("collection/{id}")
-    suspend fun getCollectionDetails(@Path("id") objectNumber: Long): Response<ArtworkDetailResponse>
+    suspend fun getCollectionDetails(@Path("id") objectNumber: String): Response<ArtworkDetailResponse>
 }

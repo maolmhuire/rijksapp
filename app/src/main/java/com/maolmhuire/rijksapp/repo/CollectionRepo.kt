@@ -8,6 +8,6 @@ class CollectionRepo(private val collectionService: CollectionService) {
     suspend fun getFromCollection(page: Int = 0): Response<CollectionResponse> =
         collectionService.getFromCollection(page = page)
 
-    suspend fun getCollectionDetails(objectNumber: Long) =
+    suspend fun getCollectionDetails(objectNumber: String) =
         collectionService.getCollectionDetails(objectNumber)
 }

@@ -1,15 +1,6 @@
 package com.maolmhuire.rijksapp.model
 
 /**
- * UI Models:
- */
-sealed class CollectionItemUI {
-    data class ArtObjectUI(val artObject: ArtObject) : CollectionItemUI()
-    data class CategoryMakersSeparatorUI(val makersNames: String) : CollectionItemUI()
-}
-
-
-/**
  * Responses:
  */
 data class CollectionResponse(
@@ -84,50 +75,56 @@ data class ArtworkDetailResponse(
 )
 
 data class ArtObjectDetailed(
-    val acquisition: Acquisition,
-    val artistRole: Any,
-    val associations: List<Any>,
-    val catRefRPK: List<Any>,
-    val copyrightHolder: Any,
-    val dating: Dating,
-    val description: String,
-    val dimensions: List<Dimension>,
-    val documentation: List<String>,
-    val exhibitions: List<Any>,
+    val acquisition: Acquisition?,
+    val artistRole: String?,
+    val associations: List<Any>?,
+    val catRefRPK: List<Any>?,
+    val classification: Classification?,
+    val colors: List<Color>?,
+    val colorsWithNormalization: List<ColorsWithNormalization>?,
+    val copyrightHolder: Any?,
+    val dating: Dating?,
+    val description: String?,
+    val dimensions: List<Dimension>?,
+    val documentation: List<String>?,
+    val exhibitions: List<Any>?,
     val hasImage: Boolean,
-    val historicalPersons: List<String>,
-    val id: String,
-    val inscriptions: List<Any>,
-    val label: Label,
-    val labelText: Any,
-    val language: String,
-    val links: Links,
-    val location: String,
-    val longTitle: String,
-    val makers: List<Any>,
-    val materials: List<String>,
-    val objectCollection: List<String>,
-    val objectNumber: String,
-    val objectTypes: List<String>,
-    val physicalMedium: String,
-    val physicalProperties: List<Any>,
-    val plaqueDescriptionDutch: String,
-    val plaqueDescriptionEnglish: String,
-    val principalMaker: String,
-    val principalMakers: List<PrincipalMaker>,
-    val principalOrFirstMaker: String,
-    val priref: String,
-    val productionPlaces: List<String>,
-    val scLabelLine: String,
-    val showImage: Boolean,
-    val subTitle: String,
-    val techniques: List<Any>,
-    val title: String,
-    val titles: List<String>,
-    val webImage: WebImage
+    val historicalPersons: List<Any>?,
+    val id: String?,
+    val inscriptions: List<Any>?,
+    val label: Label?,
+    val labelText: Any?,
+    val language: String?,
+    val links: Links?,
+    val location: String?,
+    val longTitle: String?,
+    val makers: List<Maker>?,
+    val materials: List<String>?,
+    val normalized32Colors: List<Normalized32Color>?,
+    val normalizedColors: List<NormalizedColor>?,
+    val objectCollection: List<String>?,
+    val objectNumber: String?,
+    val objectTypes: List<String>?,
+    val physicalMedium: String?,
+    val physicalProperties: List<Any>?,
+    val plaqueDescriptionDutch: String?,
+    val plaqueDescriptionEnglish: String?,
+    val principalMaker: String?,
+    val principalMakers: List<Maker>?,
+    val principalOrFirstMaker: String?,
+    val priref: String?,
+    val productionPlaces: List<String>?,
+    val scLabelLine: String?,
+    val showImage: Boolean?,
+    val subTitle: String?,
+    val techniques: List<Any>?,
+    val title: String?,
+    val titles: List<String>?,
+    val webImage: WebImage?
 )
 
 data class ArtObjectPage(
+    val adlibOverrides: AdlibOverrides?,
     val audioFile1: Any?,
     val audioFileLabel1: Any?,
     val audioFileLabel2: Any?,
@@ -147,6 +144,27 @@ data class Acquisition(
     val method: String?
 )
 
+data class Classification(
+    val events: List<Any>?,
+    val iconClassDescription: List<Any>?,
+    val iconClassIdentifier: List<Any>?,
+    val motifs: List<Any>?,
+    val objectNumbers: List<String>?,
+    val people: List<Any>?,
+    val periods: List<Any>?,
+    val places: List<Any>?
+)
+
+data class Color(
+    val hex: String?,
+    val percentage: Int?
+)
+
+data class ColorsWithNormalization(
+    val normalizedHex: String?,
+    val originalHex: String?
+)
+
 data class Dating(
     val period: Int?,
     val presentingDate: String?,
@@ -156,8 +174,8 @@ data class Dating(
 )
 
 data class Dimension(
-    val part: Any?,
-    val precision: Any?,
+    val part: String?,
+    val precision: String?,
     val type: String?,
     val unit: String?,
     val value: String?
@@ -167,24 +185,40 @@ data class Label(
     val date: String?,
     val description: String?,
     val makerLine: String?,
-    val notes: Any,
+    val notes: String?,
     val title: String?
 )
 
-data class PrincipalMaker(
+data class Maker(
     val biography: String?,
     val dateOfBirth: String?,
-    val dateOfBirthPrecision: Any,
+    val dateOfBirthPrecision: String?,
     val dateOfDeath: String?,
-    val dateOfDeathPrecision: Any,
+    val dateOfDeathPrecision: String?,
     val labelDesc: String?,
     val name: String?,
     val nationality: String?,
-    val occupation: List<String?>?,
+    val occupation: List<String>?,
     val placeOfBirth: String?,
     val placeOfDeath: String?,
-    val productionPlaces: List<String?>?,
-    val qualification: Any,
-    val roles: List<String?>?,
+    val productionPlaces: List<String>?,
+    val qualification: String?,
+    val roles: List<String>?,
     val unFixedName: String?
+)
+
+data class Normalized32Color(
+    val hex: String?,
+    val percentage: Int?
+)
+
+data class NormalizedColor(
+    val hex: String?,
+    val percentage: Int?
+)
+
+data class AdlibOverrides(
+    val etiketText: String?,
+    val maker: Any?,
+    val titel: Any?
 )

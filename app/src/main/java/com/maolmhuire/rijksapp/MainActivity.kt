@@ -2,8 +2,7 @@ package com.maolmhuire.rijksapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -13,6 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_RijksApp)
         super.onCreate(savedInstanceState)
@@ -20,11 +21,15 @@ class MainActivity : AppCompatActivity() {
             setContentView(root)
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            val navController = navHostFragment.navController
+            navController = navHostFragment.navController
             val appBarConfiguration = AppBarConfiguration(navController.graph)
+            mainToolbar.title = getString(R.string.app_name)
             mainToolbar.setupWithNavController(navController, appBarConfiguration)
-            setSupportActionBar(mainToolbar)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
 }
