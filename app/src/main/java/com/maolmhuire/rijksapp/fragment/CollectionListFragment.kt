@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,9 +19,11 @@ import com.maolmhuire.rijksapp.databinding.FragCollectionListBinding
 import com.maolmhuire.rijksapp.model.ArtObject
 import com.maolmhuire.rijksapp.viewmodel.CollectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class CollectionListFragment : Fragment() {
@@ -44,27 +47,28 @@ class CollectionListFragment : Fragment() {
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
 
-        val adapter = PagingCollectionAdapter(object : PagingCollectionAdapter.CollectionAdapterListener {
-            override fun onItemClick(transitionImage: View, artObject: ArtObject) {
-                ViewCompat.setTransitionName(transitionImage, "item_image")
-                val extras = FragmentNavigatorExtras(transitionImage to "item_image")
-                collectionViewModel.getArtObjectDetailed(artObject)
+        val adapter =
+            PagingCollectionAdapter(object : PagingCollectionAdapter.CollectionAdapterListener {
+                override fun onItemClick(transitionImage: View, artObject: ArtObject) {
+                    ViewCompat.setTransitionName(transitionImage, "item_image")
+                    val extras = FragmentNavigatorExtras(transitionImage to "item_image")
+                    collectionViewModel.getArtObjectDetailed(artObject)
 
-                findNavController().navigate(
-                    R.id.action_collectionListFragment_to_collectionDetailFragment,
-                    bundleOf("url" to artObject.webImage.url),
-                    null,
-                    extras
-                )
-            }
-        })
+                    findNavController().navigate(
+                        R.id.action_collectionListFragment_to_collectionDetailFragment,
+                        bundleOf("url" to artObject.webImage.url),
+                        null,
+                        extras
+                    )
+                }
+            })
         binding.rvCollectionList.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             collectionViewModel.flowPagingData
                 .catch { it.printStackTrace() }
                 .collectLatest { pagingData ->
-                adapter.submitData(pagingData)
-            }
+                    adapter.submitData(pagingData)
+                }
         }
     }
 

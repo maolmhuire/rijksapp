@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Observer
@@ -46,11 +47,15 @@ class CollectionDetailFragment : Fragment() {
         }
         collectionViewModel.artObjectDetailed.observe(viewLifecycleOwner, Observer {
             when (it) {
+                is UIState.Loading -> {
+                    binding.pbCollectionDetail.isVisible = true
+                }
                 is UIState.Success -> {
                     val detailsFormat = "%s \n\n%s \n\n%s \n\n%s \n\n%s \n\n%s \n\n%s \n\n%s"
                     val notAvail = getString(R.string.not_available)
                     val yearEarly = it.data.dating?.yearEarly?.toString() ?: notAvail
                     val yearLate = it.data.dating?.yearLate?.toString() ?: notAvail
+                    binding.pbCollectionDetail.isVisible = false
                     binding.tvDetails.text = String.format(
                         Locale.UK,
                         detailsFormat,
@@ -80,6 +85,8 @@ class CollectionDetailFragment : Fragment() {
                     )
                 }
                 is UIState.Failure -> {
+                    binding.pbCollectionDetail.isVisible = false
+                    binding.tvDetails.text = getString(R.string.error_message)
                     Timber.w(it.t.message)
                 }
             }
