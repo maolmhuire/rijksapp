@@ -8,7 +8,6 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.navArgs
 import coil.load
 import com.google.android.material.transition.MaterialContainerTransform
 import com.maolmhuire.rijksapp.R
@@ -16,8 +15,9 @@ import com.maolmhuire.rijksapp.databinding.FragCollectionDetailBinding
 import com.maolmhuire.rijksapp.model.UIState
 import com.maolmhuire.rijksapp.viewmodel.CollectionViewModel
 import timber.log.Timber
+import java.util.*
 
-class CollectionDetailFragment : Fragment()  {
+class CollectionDetailFragment : Fragment() {
 
     private val collectionViewModel: CollectionViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private lateinit var binding: FragCollectionDetailBinding
@@ -45,9 +45,39 @@ class CollectionDetailFragment : Fragment()  {
             binding.ivCollectionDetailImage.load(arguments?.get("url") ?: "")
         }
         collectionViewModel.artObjectDetailed.observe(viewLifecycleOwner, Observer {
-            when(it) {
+            when (it) {
                 is UIState.Success -> {
-                    binding.tvTitle.text = it.data.title
+                    val detailsFormat = "%s \n\n%s \n\n%s \n\n%s \n\n%s \n\n%s \n\n%s \n\n%s"
+                    val notAvail = getString(R.string.not_available)
+                    val yearEarly = it.data.dating?.yearEarly?.toString() ?: notAvail
+                    val yearLate = it.data.dating?.yearLate?.toString() ?: notAvail
+                    binding.tvDetails.text = String.format(
+                        Locale.UK,
+                        detailsFormat,
+                        getString(R.string.collection_detail_title, it.data.title),
+                        getString(R.string.collection_detail_full_title, it.data.longTitle),
+                        getString(
+                            R.string.collection_detail_description,
+                            it.data.description ?: notAvail
+                        ),
+                        getString(
+                            R.string.collection_detail_maker,
+                            it.data.principalMaker ?: notAvail
+                        ),
+                        getString(
+                            R.string.collection_detail_location,
+                            it.data.location ?: notAvail
+                        ),
+                        getString(
+                            R.string.collection_detail_object_num,
+                            it.data.objectNumber ?: notAvail
+                        ),
+                        getString(R.string.collection_detail_years, yearEarly, yearLate),
+                        getString(
+                            R.string.collection_detail_artist_role,
+                            it.data.artistRole ?: notAvail
+                        )
+                    )
                 }
                 is UIState.Failure -> {
                     Timber.w(it.t.message)

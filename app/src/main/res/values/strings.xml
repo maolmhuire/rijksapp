@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">RijksApp</string>
     <string name="empty_text">No text provided.</string>
+    <string name="collection_detail_title">"Title: %s"</string>
+    <string name="collection_detail_full_title">"Full title: %s"</string>
+    <string name="collection_detail_description">"Description: %s"</string>
+    <string name="collection_detail_maker">"Principal maker: %s"</string>
+    <string name="collection_detail_location">"Location: %s"</string>
+    <string name="collection_detail_object_num">"Object number: %s"</string>
+    <string name="collection_detail_years">"Start year: %s. End year: %s"</string>
+    <string name="collection_detail_artist_role">"Artist role: %s"</string>
+    <string name="not_available">Not available</string>
 </resources>

@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
-    const val BASE_URL = "https://www.rijksmuseum.nl/api/nl/"
+    const val BASE_URL = "https://www.rijksmuseum.nl/api/en/"
     const val TOKEN = "0fiuZFh4"
 
     @Singleton
@@ -37,7 +37,6 @@ object ApiModule {
                     .url
                     .newBuilder()
                     .addQueryParameter("key", TOKEN)
-                    .addQueryParameter("imgonly", "True")
                     .build()
                 chain.proceed(chain.request().newBuilder().url(url).build())
             }
@@ -47,11 +46,13 @@ object ApiModule {
     @Singleton
     @Provides
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create(
-            Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
-        ))
+        .addConverterFactory(
+            MoshiConverterFactory.create(
+                Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
+            )
+        )
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .build()
