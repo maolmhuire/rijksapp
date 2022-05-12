@@ -1,6 +1,13 @@
 package com.maolmhuire.rijksapp.model
 
-import com.squareup.moshi.Json
+/**
+ * UI Models:
+ */
+sealed class CollectionItemUI {
+    data class ArtObjectUI(val artObject: ArtObject) : CollectionItemUI()
+    data class CategoryMakersSeparatorUI(val makersNames: String) : CollectionItemUI()
+}
+
 
 /**
  * Responses:

@@ -37,6 +37,7 @@ object ApiModule {
                     .url
                     .newBuilder()
                     .addQueryParameter("key", TOKEN)
+                    .addQueryParameter("imgonly", "True")
                     .build()
                 chain.proceed(chain.request().newBuilder().url(url).build())
             }

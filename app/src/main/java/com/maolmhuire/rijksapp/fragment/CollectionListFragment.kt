@@ -9,12 +9,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.maolmhuire.rijksapp.R
 import com.maolmhuire.rijksapp.adapter.PagingCollectionAdapter
 import com.maolmhuire.rijksapp.databinding.FragCollectionListBinding
+import com.maolmhuire.rijksapp.model.ArtObject
 import com.maolmhuire.rijksapp.viewmodel.CollectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -36,10 +39,16 @@ class CollectionListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = PagingCollectionAdapter()
+        val adapter = PagingCollectionAdapter(object : PagingCollectionAdapter.CollectionAdapterListener {
+            override fun onItemClick(artObject: ArtObject) {
+                findNavController().navigate(R.id.action_collectionListFragment_to_collectionDetailFragment)
+            }
+        })
         binding.rvCollectionList.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
-            collectionViewModel.flowPagingData().collectLatest { pagingData ->
+            collectionViewModel.flowPagingData()
+                .catch { it.printStackTrace() }
+                .collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }

@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface CollectionService {
     @GET("collection")
     suspend fun getFromCollection(
-        @Query("p") page: Int, @Query("ps") limit: Int = 25
+        @Query("p") page: Int, @Query("ps") limit: Int = 25, @Query("s") sort: String = "artist"
     ): Response<CollectionResponse>
 
     @GET("collection/{id}")

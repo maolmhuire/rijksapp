@@ -6,8 +6,7 @@
 
     <fragment
         android:id="@+id/collectionListFragment"
-        android:name="com.maolmhuire.rijksapp.fragment.CollectionListFragment"
-        android:label="CollectionListFragment">
+        android:name="com.maolmhuire.rijksapp.fragment.CollectionListFragment">
         <action
             android:id="@+id/action_collectionListFragment_to_collectionDetailFragment"
             app:destination="@id/collectionDetailFragment" />
@@ -15,7 +14,6 @@
 
     <fragment
         android:id="@+id/collectionDetailFragment"
-        android:name="com.maolmhuire.rijksapp.fragment.CollectionDetailFragment"
-        android:label="CollectionDetailFragment" />
+        android:name="com.maolmhuire.rijksapp.fragment.CollectionDetailFragment" />
 
 </navigation>

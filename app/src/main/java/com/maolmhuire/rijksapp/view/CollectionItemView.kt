@@ -3,6 +3,7 @@ package com.maolmhuire.rijksapp.view
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import coil.load
 import com.maolmhuire.rijksapp.R
 import com.maolmhuire.rijksapp.databinding.ViewCollectionItemBinding
@@ -18,7 +19,20 @@ class CollectionItemView @JvmOverloads constructor(
     )
 
     fun setImage(url: String) {
-        binding.ivCollectionImage.load(url)
+        with(binding) {
+            ivCollectionImage.load(url) {
+                listener(onStart = {
+                    ivCollectionImage.setImageDrawable(
+                        ContextCompat.getDrawable(context, R.drawable.image_bg_placeholder)
+                    ) },
+                    onError = { _, _ ->
+                        ivCollectionImage.setImageDrawable(
+                            ContextCompat.getDrawable(context, R.drawable.image_bg_error)
+                        )
+                    }
+                )
+            }
+        }
     }
 
     fun setText(text: String) {
