@@ -2,6 +2,7 @@ package com.maolmhuire.rijksapp.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import coil.load
@@ -38,4 +39,6 @@ class CollectionItemView @JvmOverloads constructor(
     fun setText(text: String) {
         binding.tvTitle.text = text
     }
+
+    fun getImageView(): ImageView = binding.ivCollectionImage
 }

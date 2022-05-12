@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -32,10 +33,12 @@ class PagingCollectionAdapter(private val listener: CollectionAdapterListener)
     override fun onBindViewHolder(holder: CollectionItemViewHolder, position: Int) {
         val item = requireNotNull(getItem(position))
         if (item is ArtObjectUI) {
-            with(holder as ArtObjectViewHolder) {
-                collectionView.setText(item.artObject.longTitle)
-                collectionView.setImage(item.artObject.webImage.url)
-                collectionView.setOnClickListener { listener.onItemClick(item.artObject) }
+            with((holder as ArtObjectViewHolder).collectionView) {
+                setText(item.artObject.longTitle)
+                setImage(item.artObject.webImage.url)
+                setOnClickListener {
+                    listener.onItemClick(getImageView(), item.artObject)
+                }
             }
         } else if (item is CategoryMakersSeparatorUI) {
             (holder as CategoryMakersSeparatorViewHolder).tvMakersSeparatorTitle.text =
@@ -64,7 +67,7 @@ class PagingCollectionAdapter(private val listener: CollectionAdapterListener)
     }
 
     interface CollectionAdapterListener {
-        fun onItemClick(artObject: ArtObject)
+        fun onItemClick(transitionImage: View, artObject: ArtObject)
     }
 }
 

@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.maolmhuire.rijksapp.R
 import com.maolmhuire.rijksapp.adapter.PagingCollectionAdapter
@@ -36,10 +40,22 @@ class CollectionListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Shared transitions:
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
         val adapter = PagingCollectionAdapter(object : PagingCollectionAdapter.CollectionAdapterListener {
-            override fun onItemClick(artObject: ArtObject) {
+            override fun onItemClick(transitionImage: View, artObject: ArtObject) {
+                ViewCompat.setTransitionName(transitionImage, "item_image")
+                val extras = FragmentNavigatorExtras(transitionImage to "item_image")
                 collectionViewModel.getArtObjectDetailed(artObject)
-                findNavController().navigate(R.id.action_collectionListFragment_to_collectionDetailFragment)
+
+                findNavController().navigate(
+                    R.id.action_collectionListFragment_to_collectionDetailFragment,
+                    bundleOf("url" to artObject.webImage.url),
+                    null,
+                    extras
+                )
             }
         })
         binding.rvCollectionList.adapter = adapter
