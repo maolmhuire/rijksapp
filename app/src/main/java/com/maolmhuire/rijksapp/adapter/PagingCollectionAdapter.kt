@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -53,7 +52,7 @@ class PagingCollectionAdapter(private val listener: CollectionAdapterListener)
             with(parent) {
                 CategoryMakersSeparatorViewHolder(
                     LayoutInflater.from(context)
-                        .inflate(R.layout.view_makers_seperator, parent, false)
+                        .inflate(R.layout.view_collection_makers_seperator, parent, false)
                 )
             }
         }
@@ -62,7 +61,7 @@ class PagingCollectionAdapter(private val listener: CollectionAdapterListener)
     override fun getItemViewType(position: Int): Int {
         return when(checkNotNull(getItem(position))) {
             is ArtObjectUI -> R.layout.view_collection_item
-            is CategoryMakersSeparatorUI -> R.layout.view_makers_seperator
+            is CategoryMakersSeparatorUI -> R.layout.view_collection_makers_seperator
         }
     }
 

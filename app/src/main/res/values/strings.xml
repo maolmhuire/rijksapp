@@ -10,5 +10,6 @@
     <string name="collection_detail_years">"Start year: %s. End year: %s"</string>
     <string name="collection_detail_artist_role">"Artist role: %s"</string>
     <string name="not_available">Not available</string>
-    <string name="error_message">We encountered an error. \\nPlease try again.</string>
+    <string name="error_message">We encountered an error. Please try again.</string>
+    <string name="tap_to_retry">Tap to Retry</string>
 </resources>

@@ -13,17 +13,22 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import com.maolmhuire.rijksapp.R
+import com.maolmhuire.rijksapp.adapter.CollectionLoadStateAdapter
 import com.maolmhuire.rijksapp.adapter.PagingCollectionAdapter
 import com.maolmhuire.rijksapp.databinding.FragCollectionListBinding
 import com.maolmhuire.rijksapp.model.ArtObject
 import com.maolmhuire.rijksapp.viewmodel.CollectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 @AndroidEntryPoint
 class CollectionListFragment : Fragment() {
@@ -62,12 +67,42 @@ class CollectionListFragment : Fragment() {
                     )
                 }
             })
-        binding.rvCollectionList.adapter = adapter
+
+        adapter.addLoadStateListener { loadState ->
+            with(binding) {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        pbCollectionListLoading.isVisible = true
+                    }
+                    loadState.prepend is LoadState.Error
+                            || loadState.append is LoadState.Error
+                            || loadState.refresh is LoadState.Error -> {
+                        pbCollectionListLoading.isVisible = false
+                        tvErrorText.isVisible = true
+                    }
+                    else -> pbCollectionListLoading.isVisible = false
+                }
+            }
+        }
+
+        val concatAdapter = adapter.withLoadStateHeaderAndFooter(
+            header = CollectionLoadStateAdapter {
+                adapter.retry()
+            },
+            footer = CollectionLoadStateAdapter {
+                adapter.retry()
+            }
+        )
+
+        binding.rvCollectionList.adapter = concatAdapter
+
         viewLifecycleOwner.lifecycleScope.launch {
             collectionViewModel.flowPagingData
-                .catch { it.printStackTrace() }
                 .collectLatest { pagingData ->
-                    adapter.submitData(pagingData)
+                    withContext(Dispatchers.Main) {
+                        binding.tvErrorText.isVisible = false
+                        adapter.submitData(pagingData)
+                    }
                 }
         }
     }
