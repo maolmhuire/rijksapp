@@ -44,7 +44,6 @@ class LaunchSmokeTest {
             )
         )
         recyclerView.perform(actionOnItemAtPosition<ViewHolder>(1, click()))
-        // Add this comment.
 
         val imageView = onView(
             allOf(
